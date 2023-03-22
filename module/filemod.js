@@ -3,9 +3,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const process = require('node:process');
 
-//to take input from commandLine
-var args = process.argv;
-var pathName= path.dirname(args[1])+'/';
+//to take input from commandinput
+let input = process.argv;
+let operation = input[2];
+let fileName = input[3];
+var pathName = path.dirname(input[1]) + '/';
 
 //display all the Operations
 function print(){
@@ -27,30 +29,30 @@ if (process.argv[2] === undefined) {
    }
    //display the Commands to perform the Operations
    else { 
-    if (args[2] === '1'){
+    if (operation === '1'){
         console.log('To perform type : node filemod.js RF "Filename" ')}
-    if (args[2] === '2'){
+    if (operation === '2'){
         console.log('To perform type : node filemod.js CF "Foldername" "Filename" "content" ')}
-    if (args[2] === '3'){
+    if (operation === '3'){
         console.log('To perform type : node filemod.js UF "Foldername" "Filename" "content to be updated in the file"')}
-    if (args[2] === '4'){
+    if (operation === '4'){
         console.log('To perform type : node filemod.js DF "Foldername" "Filename" ')}
-    if (args[2] === '5'){
+    if (operation === '5'){
         console.log('To perform type : node filemod.js CFO "Foldername" "path/"')}
-    if (args[2] === '6'){
+    if (operation === '6'){
         console.log('To perform type : node filemod.js DFO "Foldername" "path/"')}
-    if (args[2] === '7'){
+    if (operation === '7'){
         console.log('To perform type : node filemod.js RFO "Foldername" "path/"')}
-    if (args[2] === '8'){
+    if (operation === '8'){
         console.log('To perform type : node filemod.js UFO "Original Foldername" "New Foldername" "path/"')}
-    if (args[2] === '9'){
+    if (operation === '9'){
         process.exit();
     }
 
     //read File
-    if (args[2] === 'RF'){
+    if (operation === 'RF'){
         try {
-            const data = fs.readFileSync(args[3], 'utf8');
+            const data = fs.readFileSync(fileName, 'utf8');
             console.log(data);
           } catch (err) {
             console.error(err);
@@ -59,66 +61,66 @@ if (process.argv[2] === undefined) {
     }
 
     //create File
-    if (args[2] === 'CF'){
-        var str=""
-        for (let i = 5; i < args.length; i++) {
-            str=str+" " +args[i];
+    if (operation === 'CF'){
+        var str = "";
+        for (let i = 5; i < input.length; i++) {
+            str = str +" "+ input[i];
         }
-        fs.writeFileSync(pathName+args[3]+'/'+args[4], str, 
+        fs.writeFileSync(pathName + fileName +'/'+ input[4], str, 
         console.log('File is created successfully!')
         )
         print();
     }
 
     //delete File
-    if (args[2] === 'DF'){
-        fs.unlinkSync(pathName+args[3]+'/'+args[4]);
+    if (operation === 'DF'){
+        fs.unlinkSync(pathName + fileName +'/'+ input[4]);
         console.log('File deleted successfully!')
         print();
     }
 
     //update File 
-    if (args[2] === 'UF'){
-        var str=""
-        for (let i = 5; i < args.length; i++) {
-            str=str+" " +args[i];
+    if (operation === 'UF'){
+        var str = "";
+        for (let i = 5; i < input.length; i++) {
+            str = str +" "+ input[i];
         }
-        fs.writeFileSync(pathName+args[3]+'/'+args[4], str, 
+        fs.writeFileSync(pathName + fileName +'/'+ input[4], str, 
         console.log('File is updated successfully!')
         );
         print();
     }
 
     //create folder 
-    if(args[2] === 'CFO'){
-        if (!fs.existsSync(pathName + args[4] + args[3])) {
-            fs.mkdirSync(pathName + args[4] + args[3]);
+    if(operation === 'CFO'){
+        if (!fs.existsSync(pathName + input[4] + fileName)) {
+            fs.mkdirSync(pathName + input[4] + fileName);
         }
             console.log('Folder is created successfully!')
             print();
     } 
 
     //delete Folder
-    if(args[2] === 'DFO'){
-        fs.rmdirSync(pathName + args[4] + args[3], err => {
+    if(operation === 'DFO'){
+        fs.rmdirSync(pathName + input[4] + fileName, err => {
             if (err) {
               throw err;
             }
-            console.log(`Folder ${args[3]} is deleted successfully!`);
+            console.log(`Folder ${fileName} is deleted successfully!`);
         });
         print();
     }
 
     //read File
-    if(args[2] === 'RFO'){
-        console.log('\n The '+args[3]+' directory consists : ');
-        console.log(fs.readdirSync(pathName+ args[4] +args[3]));
+    if(operation === 'RFO'){
+        console.log('\n The '+fileName+' directory consists : ');
+        console.log(fs.readdirSync(pathName+ input[4] +fileName));
         print();
     }
 
     //update Folder
-    if(args[2] === 'UFO'){
-    fs.rename(pathName + args[5] +args[3], pathName + args[5] +args[4], err => {
+    if(operation === 'UFO'){
+    fs.rename(pathName + input[5] +fileName, pathName + input[5] +input[4], err => {
         if (err) {
         console.error(err);
         }
